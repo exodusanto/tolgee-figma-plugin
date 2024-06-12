@@ -35,12 +35,18 @@ type KeyScreenshotDto = components["schemas"]["KeyScreenshotDto"];
 
 export const Push: FunctionalComponent = () => {
   const language = useGlobalState((c) => c.config!.language!);
+  const useNameAsDefaultKey = useGlobalState(
+    (c) => c.config?.useNameAsDefaultKey
+  );
   const { setRoute } = useGlobalActions();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [_loadingStatus, setLoadingStatus] = useState<string | undefined>();
   const [changes, setChanges] = useState<KeyChanges>();
-  const selectedNodes = useConnectedNodes({ ignoreSelection: false });
+  const selectedNodes = useConnectedNodes({
+    ignoreSelection: false,
+    useNameAsDefaultKey,
+  });
 
   const nodes = selectedNodes.data?.items ?? [];
 

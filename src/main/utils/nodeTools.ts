@@ -6,6 +6,7 @@ export const getNodeInfo = (node: TextNode): NodeInfo => {
   const pluginData = JSON.parse(
     node.getPluginData(TOLGEE_NODE_INFO) || "{}"
   ) as Partial<NodeInfo>;
+
   return {
     id: node.id,
     name: node.name,
@@ -56,8 +57,19 @@ export const findTextNodes = (nodes: readonly SceneNode[]): TextNode[] => {
   return result;
 };
 
-export const findTextNodesInfo = (nodes: readonly SceneNode[]): NodeInfo[] => {
-  return findTextNodes(nodes).map(getNodeInfo);
+export const findTextNodesInfo = (
+  nodes: readonly SceneNode[],
+  options?: Partial<{ useNameAsDefaultKey: boolean }>
+): NodeInfo[] => {
+  return findTextNodes(nodes)
+    .map(getNodeInfo)
+    .map((n) => {
+      if (!n.key && options?.useNameAsDefaultKey) {
+        return { ...n, key: n.name };
+      }
+
+      return n;
+    });
 };
 
 export const findLastParentFrame = (subject: BaseNode) => {
@@ -70,4 +82,19 @@ export const findLastParentFrame = (subject: BaseNode) => {
     node = node.parent;
   }
   return lastFrame;
+};
+
+export const getNodeKey = (
+  node: NodeInfo,
+  useNameAsDefaultKey = false
+): string => {
+  if (node.key) {
+    return node.key;
+  }
+
+  if (useNameAsDefaultKey) {
+    return node.name;
+  }
+
+  return node.key;
 };
