@@ -1,12 +1,14 @@
 import { createEndpoint } from "../utils/createEndpoint";
+import { getNodeInfo } from "../utils/nodeTools";
 
 export type DeselectNodeProps = {
   id: string;
+  removeNotConnected?: boolean;
 };
 
 export const deselectNodeEndpoint = createEndpoint(
   "DESELECT_NODE",
-  async ({ id }: DeselectNodeProps) => {
+  async ({ id, removeNotConnected }: DeselectNodeProps) => {
     const currentSelection = figma.currentPage.selection;
 
     if (currentSelection.length === 0) {
@@ -16,7 +18,8 @@ export const deselectNodeEndpoint = createEndpoint(
     // Check if all selected nodes are text nodes removed from the selection
     if (currentSelection.every((node) => node.type === "TEXT")) {
       figma.currentPage.selection = currentSelection.filter(
-        (node) => node.id !== id
+        (node) =>
+          !nodeShouldBeRemoved(node as TextNode, id, { removeNotConnected })
       );
 
       return;
@@ -38,7 +41,23 @@ export const deselectNodeEndpoint = createEndpoint(
     }, [] as TextNode[]);
 
     figma.currentPage.selection = expandedSelection.filter(
-      (node) => node.id !== id
+      (node) => !nodeShouldBeRemoved(node, id, { removeNotConnected })
     );
   }
 );
+
+function nodeShouldBeRemoved(
+  node: TextNode,
+  id: string,
+  options?: Partial<{ removeNotConnected: boolean }>
+): boolean {
+  if (node.id === id) {
+    return true;
+  }
+
+  if (!options?.removeNotConnected) {
+    return false;
+  }
+
+  return !getNodeInfo(node).connected;
+}
