@@ -266,7 +266,13 @@ export const Index = () => {
                   className={styles.connectButton}
                 >
                   {node.connected ? (
-                    <InsertLink width={16} height={16} />
+                    <InsertLink
+                      width={16}
+                      height={16}
+                      style={{
+                        color: "var(--figma-color-text-success)",
+                      }}
+                    />
                   ) : (
                     <InsertLink
                       width={16}
