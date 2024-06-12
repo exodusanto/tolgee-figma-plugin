@@ -4,13 +4,15 @@ import { TOLGEE_NODE_INFO } from "@/constants";
 
 export type SetNodesDataProps = {
   nodes: NodeInfo[];
+  syncName?: boolean;
 };
 
 export const setNodesDataEndpoint = createEndpoint<SetNodesDataProps, void>(
   "SET_NODES_DATA",
-  async ({ nodes }) => {
+  async ({ nodes, syncName }) => {
     for (const nodeInfo of nodes) {
       const node = figma.getNodeById(nodeInfo.id);
+
       node?.setPluginData(
         TOLGEE_NODE_INFO,
         JSON.stringify({
@@ -19,6 +21,10 @@ export const setNodesDataEndpoint = createEndpoint<SetNodesDataProps, void>(
           connected: nodeInfo.connected,
         })
       );
+
+      if (syncName && node) {
+        node.name = nodeInfo.name;
+      }
     }
   }
 );

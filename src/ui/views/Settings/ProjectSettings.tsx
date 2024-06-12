@@ -84,6 +84,8 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         ignoreNumbers: initialData?.ignoreNumbers ?? true,
         ignorePrefix: initialData?.ignorePrefix ?? "_",
         useNameAsDefaultKey: initialData?.useNameAsDefaultKey ?? false,
+        syncNodeNameAtConnection:
+          initialData?.syncNodeNameAtConnection ?? false,
       });
     }
   }, [languages, namespaces]);
@@ -190,6 +192,18 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         }
       >
         <Text>Use node name as key</Text>
+      </Checkbox>
+      <VerticalSpace space="small" />
+      <Checkbox
+        value={Boolean(settings?.syncNodeNameAtConnection)}
+        onChange={(e) =>
+          setSettings((settings) => ({
+            ...settings!,
+            syncNodeNameAtConnection: Boolean(e.currentTarget.checked),
+          }))
+        }
+      >
+        <Text>Sync node name at connection</Text>
       </Checkbox>
     </Fragment>
   );

@@ -51,16 +51,22 @@ export const Connect = ({ node }: Props) => {
     setRoute("index");
   };
 
+  const syncNodeNameAtConnection = useGlobalState(
+    (c) => c.config?.syncNodeNameAtConnection
+  );
+
   const handleConnect = async (key: string, ns: string | undefined) => {
     await setNodesDataMutation.mutateAsync({
       nodes: [
         {
           ...node,
+          ...(syncNodeNameAtConnection ? { name: key } : {}),
           key,
           ns: ns || "",
           connected: true,
         },
       ],
+      syncName: syncNodeNameAtConnection,
     });
     setRoute("index");
   };

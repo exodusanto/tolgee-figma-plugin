@@ -91,6 +91,7 @@ export type GlobalSettings = {
   ignorePrefix: string;
   ignoreNumbers: boolean;
   useNameAsDefaultKey: boolean;
+  syncNodeNameAtConnection: boolean;
 };
 
 export type CurrentDocumentSettings = GlobalSettings & {
