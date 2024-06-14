@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Divider,
+  Modal,
   Muted,
   Text,
   Textbox,
@@ -20,6 +21,7 @@ import { useSetNodesDataMutation } from "@/ui/hooks/useSetNodesDataMutation";
 import { RouteParam } from "../routes";
 import styles from "./Connect.css";
 import { SearchRow } from "./SearchRow";
+import { useSelectedNodes } from "@/ui/hooks/useSelectedNodes";
 
 type Props = RouteParam<"connect">;
 
@@ -71,6 +73,8 @@ export const Connect = ({ node }: Props) => {
     setRoute("index");
   };
 
+  const [confirmRemoveConnection, setConfirmRemoveConnection] = useState(false);
+
   const handleRemoveConnection = async () => {
     await setNodesDataMutation.mutateAsync({
       nodes: [
@@ -82,7 +86,31 @@ export const Connect = ({ node }: Props) => {
         },
       ],
     });
+    setConfirmRemoveConnection(false);
     setRoute("index");
+  };
+
+  const selectionLoadable = useSelectedNodes();
+
+  const handleRemoveAllConnections = async () => {
+    const nodes = selectionLoadable.data?.items || [];
+    await setNodesDataMutation.mutateAsync({
+      nodes: nodes.map((n) => ({
+        ...n,
+        key: "",
+        ns: undefined,
+        connected: false,
+      })),
+    });
+    setRoute("index");
+  };
+
+  const handleConfirmRemoveConnection = () => {
+    setConfirmRemoveConnection(true);
+  };
+
+  const handleCancelRemoveConnection = () => {
+    setConfirmRemoveConnection(false);
   };
 
   return (
@@ -126,7 +154,7 @@ export const Connect = ({ node }: Props) => {
       </div>
       <ActionsBottom>
         {node.connected && (
-          <Button secondary onClick={handleRemoveConnection}>
+          <Button secondary onClick={handleConfirmRemoveConnection}>
             Remove connection
           </Button>
         )}
@@ -134,6 +162,40 @@ export const Connect = ({ node }: Props) => {
           Cancel
         </Button>
       </ActionsBottom>
+      <Modal
+        open={confirmRemoveConnection}
+        title="Do you want to remove the connection?"
+        onCloseButtonClick={handleCancelRemoveConnection}
+      >
+        <div className={styles.modalBody}>
+          <Container space="small">
+            <VerticalSpace space="large" />
+            <Muted>
+              Do you want to remove the connection only for this node or for
+              all?
+            </Muted>
+            <VerticalSpace space="large" />
+          </Container>
+          <Divider />
+          <Container space="small">
+            <div className={styles.modalActions}>
+              <Button
+                style={styles.modalButton}
+                onClick={handleRemoveConnection}
+              >
+                Remove node
+              </Button>
+              <Button
+                secondary
+                style={styles.modalButton}
+                onClick={handleRemoveAllConnections}
+              >
+                Remove all
+              </Button>
+            </div>
+          </Container>
+        </div>
+      </Modal>
     </Fragment>
   );
 };

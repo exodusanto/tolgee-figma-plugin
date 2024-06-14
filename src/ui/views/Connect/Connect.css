@@ -26,3 +26,20 @@
   max-height: 220px;
   overflow-y: auto;
 }
+
+.modalBody {
+  min-width: 320px;
+  display: grid;
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  margin: 6px 0px;
+  gap: 8px;
+}
+
+.modalButton {
+  margin-right: 8px;
+}
