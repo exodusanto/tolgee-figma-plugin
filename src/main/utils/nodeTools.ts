@@ -59,13 +59,13 @@ export const findTextNodes = (nodes: readonly SceneNode[]): TextNode[] => {
 
 export const findTextNodesInfo = (
   nodes: readonly SceneNode[],
-  options?: Partial<{ useNameAsDefaultKey: boolean }>
+  options?: Partial<{ useNameAsDefaultKey: boolean; defaultNamespace?: string }>
 ): NodeInfo[] => {
   return findTextNodes(nodes)
     .map(getNodeInfo)
     .map((n) => {
       if (!n.key && options?.useNameAsDefaultKey) {
-        return { ...n, key: n.name };
+        return { ...n, key: n.name, ns: n.ns ?? options.defaultNamespace };
       }
 
       return n;

@@ -38,6 +38,7 @@ export const Push: FunctionalComponent = () => {
   const useNameAsDefaultKey = useGlobalState(
     (c) => c.config?.useNameAsDefaultKey
   );
+  const defaultNamespace = useGlobalState((c) => c.config?.namespace);
   const { setRoute } = useGlobalActions();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -46,6 +47,7 @@ export const Push: FunctionalComponent = () => {
   const selectedNodes = useConnectedNodes({
     ignoreSelection: false,
     useNameAsDefaultKey,
+    defaultNamespace,
   });
 
   const nodes = selectedNodes.data?.items ?? [];
