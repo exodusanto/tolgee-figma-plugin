@@ -55,6 +55,9 @@ export const Push: FunctionalComponent = () => {
   const keys = useMemo(() => [...new Set(nodes.map((n) => n.key))], [nodes]);
 
   const [uploadScreenshots, setUploadScreenshots] = useState(true);
+  const [keyResolution, setKeyResolution] = useState<"OVERRIDE" | "KEEP">(
+    "KEEP"
+  );
 
   const deduplicatedNodes = useMemo(() => {
     const deduplicatedNodes: NodeInfo[] = [];
@@ -219,7 +222,7 @@ export const Push: FunctionalComponent = () => {
           translations: {
             [language]: {
               text: item.newValue,
-              resolution: "OVERRIDE",
+              resolution: keyResolution,
             },
           },
         });
@@ -339,9 +342,19 @@ export const Push: FunctionalComponent = () => {
                 >
                   <Text>Upload {screenshotCount} screenshot(s)</Text>
                 </Checkbox>
-                <VerticalSpace space="medium" />
+                <VerticalSpace space="small" />
               </Fragment>
             )}
+            <Checkbox
+              data-cy="push_override_checkbox"
+              value={keyResolution === "OVERRIDE"}
+              onChange={(e) =>
+                setKeyResolution(e.currentTarget.checked ? "OVERRIDE" : "KEEP")
+              }
+            >
+              <Text>Override existing translations on Tolgee</Text>
+            </Checkbox>
+            <VerticalSpace space="medium" />
             <Changes changes={changes} />
             {noChanges && <div>No changes necessary</div>}
             <ActionsBottom>
