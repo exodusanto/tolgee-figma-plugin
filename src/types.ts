@@ -88,6 +88,8 @@ export type PartialNodeInfo = Partial<NodeInfo> & {
 export type GlobalSettings = {
   apiUrl: string;
   apiKey: string;
+  projectName?: string;
+  projectId?: number;
   ignorePrefix: string;
   ignoreNumbers: boolean;
   useNameAsDefaultKey: boolean;

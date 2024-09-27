@@ -67,7 +67,7 @@ export const Settings: FunctionComponent<Props> = ({ noNavigation }) => {
         res.scopes?.includes("translations.view") &&
         res.scopes?.includes("translations.edit")
       ) {
-        return true;
+        return res;
       }
       throw new Error(
         "Missing token scopes. The token should have translations.view and translations.edit scopes."
@@ -82,8 +82,13 @@ export const Settings: FunctionComponent<Props> = ({ noNavigation }) => {
 
   const handleValidate = async () => {
     try {
-      await validateTolgeeCredentials();
+      const tokenInfo = await validateTolgeeCredentials();
       setValidated(true);
+      setTolgeeConfig((current) => ({
+        ...current,
+        projectName: tokenInfo.projectName,
+        projectId: tokenInfo.projectId,
+      }));
     } catch (e: any) {
       setError(e.message || e);
     }

@@ -100,7 +100,9 @@ export default async function () {
 
   showUI(
     {
-      title: "Tolgee",
+      title: !config.projectName
+        ? "Tolgee"
+        : `Tolgee - ${config.projectName} (${config.projectId})`,
       ...DEFAULT_SIZE,
     },
     {

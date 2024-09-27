@@ -78,6 +78,8 @@ export const setPluginData = async (data: Partial<TolgeeConfig>) => {
     ignoreNumbers,
     useNameAsDefaultKey,
     syncNodeNameAtConnection,
+    projectId,
+    projectName,
   } = data;
   await setGlobalSettings({
     apiKey,
@@ -86,6 +88,8 @@ export const setPluginData = async (data: Partial<TolgeeConfig>) => {
     ignoreNumbers,
     useNameAsDefaultKey,
     syncNodeNameAtConnection,
+    projectId,
+    projectName,
   });
   setDocumentData({
     apiKey,
