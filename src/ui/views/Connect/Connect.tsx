@@ -35,12 +35,13 @@ export const Connect = ({ node }: Props) => {
   const [debouncedSearch] = useDebounce(search, 1000);
 
   const translationsLoadable = useApiQuery({
-    url: "/v2/projects/keys/search",
+    url: "/v2/projects/translations",
     method: "get",
     query: {
       search: debouncedSearch,
-      size: 20,
-      languageTag: language,
+      size: 100,
+      sort: ["keyNamespace", "keyName"],
+      languages: language ? [language] : undefined,
     },
     options: {
       enabled: Boolean(debouncedSearch),
@@ -146,9 +147,9 @@ export const Connect = ({ node }: Props) => {
         {debouncedSearch &&
           translationsLoadable.data?._embedded?.keys?.map((key) => (
             <SearchRow
-              key={key.id}
+              key={key.keyId}
               data={key}
-              onClick={() => handleConnect(key.name, key.namespace)}
+              onClick={() => handleConnect(key.keyName, key.keyNamespace)}
             />
           ))}
       </div>
