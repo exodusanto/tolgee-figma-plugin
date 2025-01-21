@@ -87,6 +87,7 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         syncNodeNameAtConnection:
           initialData?.syncNodeNameAtConnection ?? false,
         showGenerateKeyAction: initialData?.showGenerateKeyAction ?? true,
+        currentKeyUsage: initialData?.currentKeyUsage ?? true,
       });
     }
   }, [languages, namespaces]);
@@ -217,6 +218,18 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         }
       >
         <Text>Show generate key name button</Text>
+      </Checkbox>
+      <VerticalSpace space="small" />
+      <Checkbox
+        value={Boolean(settings?.currentKeyUsage)}
+        onChange={(e) =>
+          setSettings((settings) => ({
+            ...settings!,
+            currentKeyUsage: Boolean(e.currentTarget.checked),
+          }))
+        }
+      >
+        <Text>Show usage of key in current page</Text>
       </Checkbox>
     </Fragment>
   );

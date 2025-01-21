@@ -33,7 +33,12 @@ import { useSetNodesDataMutation } from "@/ui/hooks/useSetNodesDataMutation";
 import { DeselectNodeButton } from "@/ui/components/DeselectNodeButton/DeselectNodeButton";
 
 export const Index = () => {
-  const selectionLoadable = useSelectedNodes();
+  const currentKeyUsage = useGlobalState((c) => c.config?.currentKeyUsage);
+
+  const selectionLoadable = useSelectedNodes({
+    includeSibilings: !!currentKeyUsage,
+  });
+
   const selection = selectionLoadable.data?.items || [];
 
   const [error, setError] = useState<string>();

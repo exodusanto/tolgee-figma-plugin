@@ -64,6 +64,9 @@ export const NodeRow = ({
                 {node.ns}
               </span>
             )}
+        {!keyComponent && node.sibilings && node.sibilings.length > 0 && (
+          <div>used in {node.sibilings.length} nodes</div>
+        )}
       </div>
     </div>
   );

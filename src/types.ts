@@ -79,6 +79,7 @@ export interface NodeInfo {
   ns: string | undefined;
   connected: boolean;
   visible?: boolean;
+  sibilings?: NodeInfo[];
 }
 
 export type PartialNodeInfo = Partial<NodeInfo> & {
@@ -95,6 +96,7 @@ export type GlobalSettings = {
   useNameAsDefaultKey: boolean;
   syncNodeNameAtConnection: boolean;
   showGenerateKeyAction: boolean;
+  currentKeyUsage: boolean;
 };
 
 export type CurrentDocumentSettings = GlobalSettings & {
