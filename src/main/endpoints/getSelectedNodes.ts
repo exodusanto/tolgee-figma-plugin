@@ -3,25 +3,19 @@ import { createEndpoint } from "../utils/createEndpoint";
 import { findTextNodesInfo } from "../utils/nodeTools";
 
 export type SelectedNodesEndpointProps = {
-  includeSibilings?: boolean;
+  currentPageNodes?: NodeInfo[];
 };
 
 export const getSelectedNodesEndpoint = createEndpoint<
   SelectedNodesEndpointProps,
   { items: NodeInfo[]; somethingSelected: boolean }
->("GET_SELECTED_NODES", ({ includeSibilings = false }) => {
+>("GET_SELECTED_NODES", ({ currentPageNodes }) => {
   const somethingSelected = figma.currentPage.selection.length > 0;
-
-  const allConnectedNodes = includeSibilings
-    ? findTextNodesInfo(figma.currentPage.children).filter(
-        (item) => item.connected
-      )
-    : [];
 
   return {
     items: findTextNodesInfo(figma.currentPage.selection).map((item) => ({
       ...item,
-      sibilings: allConnectedNodes.filter(
+      sibilings: currentPageNodes?.filter(
         (connectedNode) =>
           connectedNode.key === item.key &&
           (connectedNode.ns ?? "") === (item.ns ?? "") &&

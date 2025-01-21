@@ -31,12 +31,19 @@ import styles from "./Index.css";
 import { KeyInput } from "./KeyInput";
 import { useSetNodesDataMutation } from "@/ui/hooks/useSetNodesDataMutation";
 import { DeselectNodeButton } from "@/ui/components/DeselectNodeButton/DeselectNodeButton";
+import { useConnectedNodes } from "@/ui/hooks/useConnectedNodes";
 
 export const Index = () => {
-  const currentKeyUsage = useGlobalState((c) => c.config?.currentKeyUsage);
+  const currentKeyUsage = useGlobalState(
+    (c) => c.config?.currentKeyUsage ?? true
+  );
+
+  const connectedNodes = useConnectedNodes({
+    ignoreSelection: !!currentKeyUsage,
+  });
 
   const selectionLoadable = useSelectedNodes({
-    includeSibilings: currentKeyUsage ?? true,
+    currentPageNodes: currentKeyUsage ? connectedNodes.data?.items : undefined,
   });
 
   const selection = selectionLoadable.data?.items || [];
