@@ -36,7 +36,7 @@ export const Index = () => {
   const currentKeyUsage = useGlobalState((c) => c.config?.currentKeyUsage);
 
   const selectionLoadable = useSelectedNodes({
-    includeSibilings: !!currentKeyUsage,
+    includeSibilings: currentKeyUsage ?? true,
   });
 
   const selection = selectionLoadable.data?.items || [];
@@ -50,7 +50,7 @@ export const Index = () => {
     (c) => c.config?.useNameAsDefaultKey
   );
   const showGenerateKey = useGlobalState(
-    (c) => c.config?.showGenerateKeyAction
+    (c) => c.config?.showGenerateKeyAction ?? true
   );
 
   const projectId = useGlobalState((c) => c.config?.projectId);
@@ -152,6 +152,10 @@ export const Index = () => {
       .map((n) => ({ name: n.key, namespace: n.ns }));
   }, [selection]);
 
+  const showCurrentRemoteTranslations = useGlobalState(
+    (c) => c.config?.showCurrentRemoteTranslations ?? true
+  );
+
   const remoteTranslations = useApiQuery({
     url: "/v2/projects/keys/info",
     method: "post",
@@ -162,7 +166,10 @@ export const Index = () => {
       },
     },
     options: {
-      enabled: !!projectId && connectedItemsKeys.length > 0,
+      enabled:
+        !!projectId &&
+        connectedItemsKeys.length > 0 &&
+        showCurrentRemoteTranslations,
       staleTime: 0,
     },
   });
