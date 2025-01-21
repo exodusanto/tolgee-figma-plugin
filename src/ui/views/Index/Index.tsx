@@ -44,6 +44,9 @@ export const Index = () => {
   const useNameAsDefaultKey = useGlobalState(
     (c) => c.config?.useNameAsDefaultKey
   );
+  const showGenerateKey = useGlobalState(
+    (c) => c.config?.showGenerateKeyAction
+  );
 
   const languagesLoadable = useApiQuery({
     url: "/v2/projects/languages",
@@ -118,9 +121,13 @@ export const Index = () => {
     setRoute("connect", { node });
   };
 
-  const handleKeyChange = (node: NodeInfo) => (value: string) => {
-    setNodesDataMutation.mutate({ nodes: [{ ...node, key: value }] });
-  };
+  const handleKeyChange =
+    (node: NodeInfo) => (value: string, syncName: boolean) => {
+      setNodesDataMutation.mutate({
+        nodes: [{ ...node, key: value, name: syncName ? value : node.name }],
+        syncName,
+      });
+    };
 
   const handleNsChange = (node: NodeInfo) => (value: string) => {
     setNodesDataMutation.mutate({ nodes: [{ ...node, ns: value }] });
@@ -234,6 +241,7 @@ export const Index = () => {
                   node.key || (useNameAsDefaultKey ? node.name : "")
                 }
                 onDebouncedChange={handleKeyChange(node)}
+                showGenerateKey={showGenerateKey}
               />
             )
           }

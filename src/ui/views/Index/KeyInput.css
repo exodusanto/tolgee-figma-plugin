@@ -1,0 +1,22 @@
+.wrapper {
+  position: relative;
+}
+
+.overlayAction {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 5px 5px 5px 0px;
+  z-index: 2;
+}
+
+.generateKeyButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+  color: var(--figma-color-text-secondary);
+}

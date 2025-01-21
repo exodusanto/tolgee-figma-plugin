@@ -78,6 +78,7 @@ export const setPluginData = async (data: Partial<TolgeeConfig>) => {
     ignoreNumbers,
     useNameAsDefaultKey,
     syncNodeNameAtConnection,
+    showGenerateKeyAction,
     projectId,
     projectName,
   } = data;
@@ -88,6 +89,7 @@ export const setPluginData = async (data: Partial<TolgeeConfig>) => {
     ignoreNumbers,
     useNameAsDefaultKey,
     syncNodeNameAtConnection,
+    showGenerateKeyAction,
     projectId,
     projectName,
   });

@@ -86,6 +86,7 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         useNameAsDefaultKey: initialData?.useNameAsDefaultKey ?? false,
         syncNodeNameAtConnection:
           initialData?.syncNodeNameAtConnection ?? false,
+        showGenerateKeyAction: initialData?.showGenerateKeyAction ?? true,
       });
     }
   }, [languages, namespaces]);
@@ -204,6 +205,18 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         }
       >
         <Text>Sync node name at connection</Text>
+      </Checkbox>
+      <VerticalSpace space="small" />
+      <Checkbox
+        value={Boolean(settings?.showGenerateKeyAction)}
+        onChange={(e) =>
+          setSettings((settings) => ({
+            ...settings!,
+            showGenerateKeyAction: Boolean(e.currentTarget.checked),
+          }))
+        }
+      >
+        <Text>Show generate key name button</Text>
       </Checkbox>
     </Fragment>
   );
