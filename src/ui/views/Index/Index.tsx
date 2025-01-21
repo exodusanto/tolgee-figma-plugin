@@ -156,7 +156,7 @@ export const Index = () => {
   const connectedItemsKeys = useMemo(() => {
     return selection
       .filter((n) => n.connected)
-      .map((n) => ({ name: n.key, namespace: n.ns }));
+      .map((n) => ({ name: n.key, namespace: n.ns || undefined }));
   }, [selection]);
 
   const showCurrentRemoteTranslations = useGlobalState(
@@ -177,7 +177,7 @@ export const Index = () => {
         !!projectId &&
         connectedItemsKeys.length > 0 &&
         showCurrentRemoteTranslations,
-      staleTime: 0,
+      queryKey: [language, connectedItemsKeys],
     },
   });
 
