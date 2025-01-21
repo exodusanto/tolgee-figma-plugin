@@ -37,8 +37,12 @@ function shouldIncludeNode(
   return true;
 }
 
-export const findTextNodes = (nodes: readonly SceneNode[]): TextNode[] => {
-  const documentSettings = getDocumentData();
+export const findTextNodes = (
+  nodes: readonly SceneNode[],
+  documentSettings?: Partial<CurrentDocumentSettings>
+): TextNode[] => {
+  documentSettings ??= getDocumentData();
+
   const result: TextNode[] = [];
   for (const node of nodes) {
     if (node.type === "TEXT") {
@@ -49,8 +53,8 @@ export const findTextNodes = (nodes: readonly SceneNode[]): TextNode[] => {
     // @ts-ignore
     if (node.children) {
       // @ts-ignore
-      findTextNodes(node.children as SceneNode[]).forEach((n) =>
-        result.push(n)
+      findTextNodes(node.children as SceneNode[], documentSettings).forEach(
+        (n) => result.push(n)
       );
     }
   }
