@@ -53,6 +53,8 @@ export const Index = () => {
     (c) => c.config?.showGenerateKeyAction
   );
 
+  const projectId = useGlobalState((c) => c.config?.projectId);
+
   const languagesLoadable = useApiQuery({
     url: "/v2/projects/languages",
     method: "get",
@@ -143,6 +145,63 @@ export const Index = () => {
   }, [selection]);
 
   const size = !selection || selection.length < 2 ? COMPACT_SIZE : DEFAULT_SIZE;
+
+  const connectedItemsKeys = useMemo(() => {
+    return selection
+      .filter((n) => n.connected)
+      .map((n) => ({ name: n.key, namespace: n.ns }));
+  }, [selection]);
+
+  const remoteTranslations = useApiQuery({
+    url: "/v2/projects/keys/info",
+    method: "post",
+    content: {
+      "application/json": {
+        keys: connectedItemsKeys,
+        languageTags: [language],
+      },
+    },
+    options: {
+      enabled: !!projectId && connectedItemsKeys.length > 0,
+      staleTime: 0,
+    },
+  });
+
+  const remoteTranslationsData = useMemo(() => {
+    return Object.fromEntries(
+      remoteTranslations.data?._embedded?.keys
+        ?.map((k) => [k.name, k.translations[language]?.text])
+        .filter((k) => k[1]) ?? []
+    );
+  }, [remoteTranslations.data?._embedded?.keys, language]);
+
+  const selectionWithRemoteTranslations = useMemo(() => {
+    return selection
+      .map((n) => ({
+        ...n,
+        remoteTranslation: remoteTranslationsData[n.key],
+      }))
+      .sort((a, b) => {
+        // first not connected
+        if (a.connected && !b.connected) return 1;
+        if (!a.connected && b.connected) return -1;
+
+        // then connected with differente remote
+        if (
+          a.characters !== a.remoteTranslation &&
+          b.characters === b.remoteTranslation
+        )
+          return -1;
+        if (
+          a.characters === a.remoteTranslation &&
+          b.characters !== b.remoteTranslation
+        )
+          return 1;
+
+        // then other
+        return 0;
+      });
+  }, [selection, remoteTranslationsData]);
 
   useWindowSize(size);
 
@@ -238,7 +297,7 @@ export const Index = () => {
         </Container>
       ) : (
         <NodeList
-          items={selection}
+          items={selectionWithRemoteTranslations}
           keyComponent={(node) =>
             !node.connected && (
               <KeyInput

@@ -9,6 +9,7 @@ type Props = {
   keyComponent?: ComponentChildren;
   nsComponent?: ComponentChildren;
   compact?: boolean;
+  remoteTranslation?: string;
   onClick?: () => void;
 };
 
@@ -18,6 +19,7 @@ export const NodeRow = ({
   keyComponent,
   nsComponent,
   compact,
+  remoteTranslation,
   onClick,
 }: Props) => {
   const showText = node.characters || !compact || action;
@@ -39,7 +41,13 @@ export const NodeRow = ({
           className={styles.text}
           data-cy="general_node_list_row_text"
         >
-          {node.characters}
+          <span>{node.characters}</span>
+          {remoteTranslation && remoteTranslation !== node.characters && (
+            <div class={styles.remoteBox}>
+              <span className={styles.remoteTextPrefix}>remote: </span>
+              <span className={styles.remoteText}>{remoteTranslation}</span>
+            </div>
+          )}
         </div>
       )}
       <div className={styles.action} data-cy="general_node_list_row_action">

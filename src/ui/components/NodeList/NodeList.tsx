@@ -4,7 +4,7 @@ import styles from "./NodeList.css";
 import { NodeRow } from "./NodeRow";
 import { useRef } from "preact/hooks";
 
-type Props<T extends { id: string }> = {
+type Props<T extends { id: string; remoteTranslation?: string }> = {
   items: T[];
   actionCallback?: (item: T) => ComponentChildren;
   keyComponent?: (item: T) => ComponentChildren;
@@ -14,7 +14,7 @@ type Props<T extends { id: string }> = {
   onBottomReached?: () => void;
 };
 
-export function NodeList<T extends { id: string }>({
+export function NodeList<T extends { id: string; remoteTranslation?: string }>({
   items,
   actionCallback,
   keyComponent,
@@ -23,13 +23,13 @@ export function NodeList<T extends { id: string }>({
   onClick,
 }: Props<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
-
   return (
     <div className={styles.container} ref={containerRef}>
       {items?.map((item) => (
         <NodeRow
           key={item.id}
           node={item}
+          remoteTranslation={item.remoteTranslation}
           action={actionCallback?.(item)}
           keyComponent={keyComponent?.(item)}
           nsComponent={nsComponent?.(item)}

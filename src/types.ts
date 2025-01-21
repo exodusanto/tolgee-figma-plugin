@@ -95,6 +95,7 @@ export type GlobalSettings = {
   ignoreNumbers: boolean;
   useNameAsDefaultKey: boolean;
   syncNodeNameAtConnection: boolean;
+  showCurrentRemoteTranslations: boolean;
   showGenerateKeyAction: boolean;
   currentKeyUsage: boolean;
 };

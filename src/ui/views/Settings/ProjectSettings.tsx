@@ -86,6 +86,8 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         useNameAsDefaultKey: initialData?.useNameAsDefaultKey ?? false,
         syncNodeNameAtConnection:
           initialData?.syncNodeNameAtConnection ?? false,
+        showCurrentRemoteTranslations:
+          initialData?.showCurrentRemoteTranslations ?? true,
         showGenerateKeyAction: initialData?.showGenerateKeyAction ?? true,
         currentKeyUsage: initialData?.currentKeyUsage ?? true,
       });
@@ -206,6 +208,18 @@ export const ProjectSettings: FunctionComponent<Props> = ({
         }
       >
         <Text>Sync node name at connection</Text>
+      </Checkbox>
+      <VerticalSpace space="small" />
+      <Checkbox
+        value={Boolean(settings?.showCurrentRemoteTranslations)}
+        onChange={(e) =>
+          setSettings((settings) => ({
+            ...settings!,
+            showCurrentRemoteTranslations: Boolean(e.currentTarget.checked),
+          }))
+        }
+      >
+        <Text>Show current remote translations</Text>
       </Checkbox>
       <VerticalSpace space="small" />
       <Checkbox
