@@ -43,11 +43,6 @@ export const useApiQuery = <
 
   const config = useGlobalState((c) => c.config) || {};
 
-  console.log(
-    [url, (request as any)?.path, (request as any)?.query, ...(queryKey ?? [])],
-    options
-  );
-
   return useQuery<ResponseContent<Url, Method, Paths>, any>(
     [url, (request as any)?.path, (request as any)?.query, ...(queryKey ?? [])],
     () =>
