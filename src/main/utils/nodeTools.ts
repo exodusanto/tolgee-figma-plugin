@@ -68,8 +68,8 @@ export const findTextNodesInfo = (
   return findTextNodes(nodes)
     .map(getNodeInfo)
     .map((n) => {
-      if (!n.key && options?.useNameAsDefaultKey) {
-        return { ...n, key: n.name, ns: n.ns ?? options.defaultNamespace };
+      if (options?.useNameAsDefaultKey) {
+        return { ...n, key: n.name, ns: n.ns || options.defaultNamespace };
       }
 
       return n;
