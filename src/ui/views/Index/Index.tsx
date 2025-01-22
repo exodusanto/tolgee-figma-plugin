@@ -32,6 +32,7 @@ import { KeyInput } from "./KeyInput";
 import { useSetNodesDataMutation } from "@/ui/hooks/useSetNodesDataMutation";
 import { DeselectNodeButton } from "@/ui/components/DeselectNodeButton/DeselectNodeButton";
 import { useConnectedNodes } from "@/ui/hooks/useConnectedNodes";
+import { compareNs } from "@/tools/compareNs";
 
 export const Index = () => {
   const currentKeyUsage = useGlobalState(
@@ -154,9 +155,27 @@ export const Index = () => {
   const size = !selection || selection.length < 2 ? COMPACT_SIZE : DEFAULT_SIZE;
 
   const connectedItemsKeys = useMemo(() => {
-    return selection
-      .filter((n) => n.connected)
-      .map((n) => ({ name: n.key, namespace: n.ns || undefined }));
+    const nodes = selection.filter((n) => n.connected);
+
+    const deduplicatedNodes: Array<{
+      name: string;
+      namespace: string | undefined;
+    }> = [];
+
+    nodes.forEach((node) => {
+      if (
+        !deduplicatedNodes.find(
+          (n) => node.key === n.name && compareNs(node.ns, n.namespace)
+        )
+      ) {
+        deduplicatedNodes.push({
+          name: node.key,
+          namespace: node.ns || undefined,
+        });
+      }
+    });
+
+    return deduplicatedNodes;
   }, [selection]);
 
   const showCurrentRemoteTranslations = useGlobalState(
