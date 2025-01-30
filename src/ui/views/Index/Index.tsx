@@ -219,6 +219,10 @@ export const Index = () => {
         if (a.connected && !b.connected) return 1;
         if (!a.connected && b.connected) return -1;
 
+        // first connected but without remote
+        if (a.remoteTranslation && !b.remoteTranslation) return 1;
+        if (!a.remoteTranslation && b.remoteTranslation) return -1;
+
         // then connected with differente remote
         if (
           a.characters !== a.remoteTranslation &&
@@ -370,12 +374,20 @@ export const Index = () => {
                   onClick={() => handleConnect(node)}
                   className={styles.connectButton}
                 >
-                  {node.connected ? (
+                  {node.connected && node.remoteTranslation ? (
                     <InsertLink
                       width={16}
                       height={16}
                       style={{
                         color: "var(--figma-color-text-success)",
+                      }}
+                    />
+                  ) : node.connected && !node.remoteTranslation ? (
+                    <InsertLink
+                      width={16}
+                      height={16}
+                      style={{
+                        color: "var(--figma-color-text-warning-secondary)",
                       }}
                     />
                   ) : (
